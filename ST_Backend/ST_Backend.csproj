@@ -8,13 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\**" />
     <Compile Remove="Data Access\**" />
-    <Content Remove="Controllers\**" />
     <Content Remove="Data Access\**" />
-    <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Data Access\**" />
-    <None Remove="Controllers\**" />
     <None Remove="Data Access\**" />
   </ItemGroup>
 

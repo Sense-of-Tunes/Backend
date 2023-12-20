@@ -56,7 +56,7 @@ namespace ST_Backend.Controllers
             // Analiz sonucuna göre duygu koleksiyonundan veri çek
             string duygu = filtreSonuc.Emotion;
 
-
+            return Ok(duygu);
         }
     }
 }

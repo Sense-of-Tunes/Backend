@@ -29,7 +29,59 @@ namespace ST_Backend.Controllers
             _filtreleme = filtreleme;
         }
 
+        [HttpGet]
+        public ActionResult<List<Music>> Get()
+        {
+            try
+            {
+                var musics = _database.GetCollection<Music>("Musics").Find(m => true).ToList();
+                return Ok(musics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
 
+        [HttpGet("getEmojidenDuygu")]
+        public ActionResult<List<Music>> EmojidenDuygu(string duygu, int limit = 20)
+        {
+            try
+            {
+                var collectionName = duygu;
+                var duyguCollection = _database.GetCollection<Music>(collectionName);
+
+                var duyguVerileri = duyguCollection
+                    .Find(m => true)
+                    .SortByDescending(m => m.Populerlik)
+                    .Limit(limit)
+                    .ToList();
+
+                return Ok(duyguVerileri);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+
+        [HttpGet("getDuyguEmojileri")]
+        public ActionResult<List<DuyguEmoji>> GetDuyguEmojileri()
+        {
+            try
+            {
+                var duyguEmojileri = _database.GetCollection<DuyguEmoji>("DuyguEmojileri")
+                    .Find(m => true)
+                    .ToList();
+
+                return Ok(duyguEmojileri);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
 
 
 
@@ -50,13 +102,28 @@ namespace ST_Backend.Controllers
             var filtreSonuc = _filtreleme.Filtre(result);
 
             // Console'a yazdır
-            Console.WriteLine($"Yapay Zeka Sonucu: {result}");
+            Console.WriteLine($"Yapay Zeka Sonucu: {result}");2
             Console.WriteLine($"Filtreleme Sonucu - Emotion: {filtreSonuc.Emotion}");
 
             // Analiz sonucuna göre duygu koleksiyonundan veri çek
             string duygu = filtreSonuc.Emotion;
 
-            return Ok(duygu);
+            try
+            {
+                var collectionName = duygu;
+                var duyguKoleksiyonu = _database.GetCollection<Music>(collectionName);
+
+                var randomDuyguVerileri = duyguKoleksiyonu.AsQueryable()
+                    .OrderBy(x => Guid.NewGuid())  // Koleksiyonu rastgele sırala
+                    .Take(20)                       // İlk 20 öğeyi al
+                    .ToList();
+
+                return Ok(randomDuyguVerileri);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
     }
 }

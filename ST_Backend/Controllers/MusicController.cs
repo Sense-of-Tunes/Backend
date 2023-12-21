@@ -29,11 +29,13 @@ namespace ST_Backend.Controllers
             _filtreleme = filtreleme;
         }
 
+        // Tüm müzik verilerini getiren endpoint
         [HttpGet]
         public ActionResult<List<Music>> Get()
         {
             try
             {
+                // MongoDB'den "Musics" koleksiyonundaki tüm müzikleri çek ve listeye dönüştür.
                 var musics = _database.GetCollection<Music>("Musics").Find(m => true).ToList();
                 return Ok(musics);
             }
@@ -43,14 +45,18 @@ namespace ST_Backend.Controllers
             }
         }
 
+
+        // Belirli bir duygu için popüler müzikleri getiren endpoint
         [HttpGet("getEmojidenDuygu")]
         public ActionResult<List<Music>> EmojidenDuygu(string duygu, int limit = 20)
         {
             try
             {
+                // Verilen duygu adına sahip MongoDB koleksiyonunu al.
                 var collectionName = duygu;
                 var duyguCollection = _database.GetCollection<Music>(collectionName);
 
+                // Belirli duygu için popülerlik sırasına göre sırala ve belirlenen limitteki verileri çek.
                 var duyguVerileri = duyguCollection
                     .Find(m => true)
                     .SortByDescending(m => m.Populerlik)
@@ -65,12 +71,13 @@ namespace ST_Backend.Controllers
             }
         }
 
-
+        // Duygu emojilerini getiren endpoint
         [HttpGet("getDuyguEmojileri")]
         public ActionResult<List<DuyguEmoji>> GetDuyguEmojileri()
         {
             try
             {
+                // "DuyguEmojileri" koleksiyonundaki tüm duygu emojilerini çek ve listeye dönüştür.
                 var duyguEmojileri = _database.GetCollection<DuyguEmoji>("DuyguEmojileri")
                     .Find(m => true)
                     .ToList();
@@ -83,10 +90,29 @@ namespace ST_Backend.Controllers
             }
         }
 
+        // Trend müziklerini getiren endpoint
+        [HttpGet("getTrendMuzikler")]
+        public ActionResult<List<Music>> GetTrendMuzikler()
+        {
+            try
+            {
+                // "Trend" koleksiyonundan tüm verileri çek.
+                var trendMuzikler = _database.GetCollection<Music>("Trend")
+                    .Find(m => true)
+                    .ToList();
+
+                return Ok(trendMuzikler);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
 
 
 
 
+        // Kullanıcı girdisi üzerinden duygu analizi yaparak müzik önerileri getiren endpoint
         [HttpPost("getHisAnaliz_DuyguGetir")]
         public async Task<ActionResult<IEnumerable<Music>>> GetHisAnaliz_DuyguGetir([FromBody] kullaniciGirdiModel kullaniciGirdisi)
         {

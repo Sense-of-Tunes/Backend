@@ -23,7 +23,8 @@ public class MusicContext
         return _instance;
     }
 
-    public IMongoCollection<Music> Musics => _database.GetCollection<Music>("Musics");
+    public IMongoCollection<Music> Musics => _database.GetCollection<Music>("Musics");    // Musics koleksiyonuna erişim sağlayan bir özellik
+
 
 
 }

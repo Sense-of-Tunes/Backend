@@ -6,7 +6,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     public class Music
     {
-
+        // Buradaki özelliklerin Mongodb deki hangi alanları temsil ettiğini göstermek
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

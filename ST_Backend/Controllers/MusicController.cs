@@ -102,7 +102,7 @@ namespace ST_Backend.Controllers
             var filtreSonuc = _filtreleme.Filtre(result);
 
             // Console'a yazdır
-            Console.WriteLine($"Yapay Zeka Sonucu: {result}");2
+            Console.WriteLine($"Yapay Zeka Sonucu: {result}");
             Console.WriteLine($"Filtreleme Sonucu - Emotion: {filtreSonuc.Emotion}");
 
             // Analiz sonucuna göre duygu koleksiyonundan veri çek

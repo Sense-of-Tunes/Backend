@@ -68,7 +68,7 @@
                 if (negatifSkor >= 0.85)
                     return "Kederli";
                 else
-                    return "Uzgun";
+                    return "Uzuntu";
             }
             else if (notrSkor > negatifSkor && notrSkor > pozitifSkor)
             {

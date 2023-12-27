@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ST_Backend.Al;
 using ST_Backend.Controllers;
+using Microsoft.Extensions.DependencyInjection;
+using ST_Backend.Facade; 
 
 namespace ST_Backend
 {
@@ -31,6 +33,15 @@ namespace ST_Backend
 
             // Filtreleme servisi tanýmlama
             builder.Services.AddSingleton<Filtreleme>();
+
+            // MusicFacade servisi tanýmlama
+            builder.Services.AddSingleton<MusicFacade>(provider =>
+            {
+                var musicContext = provider.GetRequiredService<MusicContext>();
+                var yapayZeka = provider.GetRequiredService<Yapay_Zeka>();
+                var filtreleme = provider.GetRequiredService<Filtreleme>();
+                return new MusicFacade(musicContext.Musics.Database, yapayZeka, filtreleme);
+            });
 
             // MusicController servisi tanýmlama
             builder.Services.AddTransient<MusicController>();

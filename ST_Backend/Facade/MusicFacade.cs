@@ -35,11 +35,10 @@ namespace ST_Backend.Facade
             {
                 var collectionName = duygu;
                 var duyguKoleksiyonu = _database.GetCollection<Music>(collectionName);
+                var duyguVerileri = await duyguKoleksiyonu.AsQueryable().ToListAsync();
 
-                var randomDuyguVerileri = duyguKoleksiyonu.AsQueryable()
-                    .OrderBy(x => Guid.NewGuid())  // Koleksiyonu rastgele sırala
-                    .Take(20)                       // İlk 20 öğeyi al
-                    .ToList();
+                var random = new Random();
+                var randomDuyguVerileri = duyguVerileri.OrderBy(x => random.Next()).Take(20).ToList();
 
                 return randomDuyguVerileri;
             }
@@ -49,5 +48,6 @@ namespace ST_Backend.Facade
                 throw new Exception($"Error retrieving music: {ex.Message}");
             }
         }
+
     }
 }
